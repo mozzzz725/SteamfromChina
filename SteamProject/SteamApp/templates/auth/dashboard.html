@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="text-center">User Dashboard</h4>
+            <div class="card-body">
+                <div class="card bs-3">
+                    <div class="card-body">
+                        <div class="card-text">
+                            {% if is_d %}
+                            Username: {{ user.username }} (Dev)
+                            {% else %}
+                            Username: {{ user.username }} (User)
+                            {% endif %}
+                        </div>
+                        <div class="card-text">
+                            Email: {{ user.email }}
+                        </div>
+                    </div>
+                </div>
+            </div>        
+            <div class="card-body text-center">
+                <a href="{% url 'home' %}" class="btn btn-outline-primary">Back</a>
+                <a href="{% url 'edit_account' %}" class="btn btn-outline-success">Edit Account</a>
+                <a class="btn btn-outline-danger" href="{% url 'logout' %}">Logout</a>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="card text-center">
+        <div class="card-header">
+            <h4>Published Games</h4>
+        </div>
+        <div class="card-body">
+            <div class="card bs-3">
+                <div class="card-body">
+                    {% if games %}
+                    <div class="list-group">
+                        {% for game in games %}
+                        <div class="card bs-2">
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ game.name }}</h5>
+                                    <small>{{ game.created_at|date:"M d, Y" }}</small>
+                                </div>
+                                <p class="mb-1">
+                                    <span class="badge bg-secondary">{{ game.genre }}</span>
+                                    {% if game.price == 0 %}
+                                        <span class="badge bg-success">Free</span>
+                                        <span class="badge bg-dark">No Revenue</span>
+                                        {% else %}
+                                        <span class="badge bg-success">${{ game.price }}</span>
+                                        <span class="badge bg-dark">${{ game.Revenue}}</span>
+                                    {% endif %}
+                                    <span class="badge bg-secondary">Visited: {{ game.visited }}</span>
+                                </p>
+                                <a href="{{ game.link }}" target="_blank" class="btn btn-sm btn-outline-primary">View Game</a>
+                                <a href="{% url 'edit_game' game.id %}" class="btn btn-outline-success">Edit Game</a>
+                                <a href="{% url 'delete_game' game.id %}" class="btn btn-outline-danger">Delete Game</a>
+                            </div>
+                        </div>
+                        <br>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        You haven't published any games yet. <a href="{% url 'post_game' %}">Post your first game</a>!
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+</div>
+{% endblock %}

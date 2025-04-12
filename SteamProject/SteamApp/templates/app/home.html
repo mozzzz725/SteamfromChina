@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h2 class="mb-4 text-center">Latest Games</h2>
+        <div class="card-body">
+            
+            {% for game in games %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ game.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        {% if game.price == 0 %}
+                        {{ game.genre }} | Free | Published by {{ game.publisher.username }}
+                        {% else %}
+                        {{ game.genre }} | ${{ game.price }} | Published by {{ game.publisher.username }}
+                        {% endif %}
+                    </h6>
+                    <p class="card-text">
+                        <a href="{% url 'continue_warning' game.id %}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            View Game
+                        </a>
+                    </p>
+                    <small class="text-muted">Posted on {{ game.created_at|date:"M d, Y" }}</small>
+                </div>
+            </div>
+            {% empty %}
+            <div class="alert alert-info">No games available yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
