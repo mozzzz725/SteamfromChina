@@ -37,6 +37,13 @@
         <div class="card-body">
             <div class="card bs-3">
                 <div class="card-body">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="text-center">
+                                <a href="{% url 'post_game' %}" class="btn btn-outline-success">Publish Game</a>
+                            </div>
+                        </div>
+                    </div>
                     {% if games %}
                     <div class="list-group">
                         {% for game in games %}

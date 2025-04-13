@@ -21,6 +21,12 @@ class Game(models.Model):
     visited= models.IntegerField(default= 0)
     revenue= models.DecimalField(max_digits= 10, decimal_places= 4, default= 0)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['-created_at']),
+            models.Index(fields=['-visited']),
+        ]
+
     def __str__(self):
         return f'{self.name} by {self.publisher.username} - {self.price}$'
     

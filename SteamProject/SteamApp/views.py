@@ -7,10 +7,40 @@ from django.contrib.auth.decorators import login_required
 from .models import Game
 from .forms import RegisterForm, LoginForm, PostGameForm, EditAccountForm, ChangePasswordForm
 from django.contrib import messages
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Sum
+
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Sum
+from .models import Game
 
 def home_view(request):
-    games = Game.objects.all().order_by('-created_at')  # Newest games first
-    return render(request, 'app/home.html', {'games': games})
+    # Get all games ordered by newest first
+    games = Game.objects.all().order_by('-created_at')
+    
+    # Calculate date range (last 30 days)
+    last_month = timezone.now() - timedelta(days=30)
+    
+    # Get total views across all games
+    total_views = Game.objects.aggregate(Sum('visited'))['visited__sum'] or 0
+    
+    # Get top 3 most visited games in last month
+    top_games = Game.objects.filter(
+        created_at__gte=last_month
+    ).order_by('-visited')[:3]
+    
+    # Get total number of games
+    total_games = Game.objects.count()
+    
+    context = {
+        'games': games,
+        'top3': top_games,  # Changed from 'top3' to be consistent
+        'total_games': total_games,
+        'total_views': total_views
+    }
+    return render(request, 'app/home.html', context)
 
 def register_view(request):
     if request.method == 'POST':
