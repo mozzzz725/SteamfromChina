@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- User Info Box -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header text-center">
+                    <h4>User Dashboard</h4>
+                </div>
+                <div class="card-body text-center">
+                    <p>
+                        Username: {{ user.username }}
+                        {% if is_d %}(Dev){% else %}(User){% endif %}
+                    </p>
+                    <p>Email: {{ user.email }}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'home' %}" class="btn btn-outline-primary">Back</a>
+                    <a href="{% url 'edit_account' %}" class="btn btn-outline-success">Edit Account</a>
+                    <a class="btn btn-outline-danger" href="{% url 'logout' %}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Published Games Section -->
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-4 mx-auto">
+            <div class="card shadow-sm rounded-4">
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <h4 class="card-title">Published Games</h4>
+                        <a href="{% url 'post_game' %}" class="btn btn-outline-success mt-2">Publish Game</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    {% if games %}
+    <!-- Responsive Grid for Published Games -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        {% for game in games %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ game.name }}</h5>
+                    <p>
+                        <span class="badge bg-secondary">{{ game.genre }}</span>
+                        {% if game.price == 0 %}
+                            <span class="badge bg-success">Free</span>
+                            <span class="badge bg-dark">No Revenue</span>
+                        {% else %}
+                            <span class="badge bg-success">${{ game.price }}</span>
+                            <span class="badge bg-dark">${{ game.Revenue }}</span>
+                        {% endif %}
+                        <span class="badge bg-info text-dark">Visited: {{ game.visited }}</span>
+                    </p>
+                    <small class="text-muted">Posted on {{ game.created_at|date:"M d, Y" }}</small>
+                </div>
+                <div class="card-footer d-flex flex-column gap-2 text-center">
+                    <a href="{{ game.link }}" target="_blank" class="btn btn-sm btn-outline-primary">View Game</a>
+                    <a href="{% url 'edit_game' game.id %}" class="btn btn-sm btn-outline-success">Edit</a>
+                    <a href="{% url 'delete_game' game.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center mt-4">
+        You haven't published any games yet. <a href="{% url 'post_game' %}">Post your first game</a>!
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

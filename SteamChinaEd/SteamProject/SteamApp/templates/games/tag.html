@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Tag: {{ tag }}{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="text-center">Tag: {{ tag }}</h4>
+                <div class="alert alert-primary mt-4 text-center">
+                    Games Found: {{ count }}
+                </div>
+            <div class="card-body">
+                <div class="card bs-3">
+                    <div class="card-body">
+                        <div class="card-text">
+                            {% for i in games %}
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ i.name }}</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">
+                                            {% if i.price == 0 %}
+                                            {{ i.genre }} | Free | Published by {{ i.publisher.username }}
+                                            {% else %}
+                                            {{ i.genre }} | ${{ i.price }} | Published by {{ i.publisher.username }}
+                                            {% endif %}
+                                        </h6>
+                                        <p class="card-text">
+                                            <a href="{% url 'continue_warning' i.id %}" class="btn btn-sm btn-outline-primary">
+                                                View Game
+                                            </a>
+                                        </p>
+                                        <small class="text-muted">Posted on {{ i.created_at|date:"M d, Y" }}</small>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="alert alert-danger mt-4">No More Games...</div>
+{% endblock content %}

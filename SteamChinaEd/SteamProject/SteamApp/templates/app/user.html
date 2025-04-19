@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Search Results for "{{ query }}"</h2>
+
+    {% if users %}
+        <div class="row justify-content-center row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            {% for user in users %}
+            <div class="col d-flex align-items-stretch">
+                <div class="card w-100 h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ user.username }}</h5>
+                        <p class="card-text text-muted">Joined: {{ user.date_joined|date:"M d, Y" }}</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{% url 'profile' user.username %}" class="btn btn-outline-success btn-sm">
+                            View Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center">No users found matching "{{ query }}"</div>
+    {% endif %}
+</div>
+{% endblock %}
